@@ -1,0 +1,39 @@
+#!/bin/bash
+# Portable Mac launcher. This .app must stay inside the project folder.
+set -euo pipefail
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:${PATH:-}"
+
+if [ -x "$HOME/.volta/bin/node" ]; then
+  export PATH="$HOME/.volta/bin:$PATH"
+fi
+if [ -x "$HOME/.local/share/fnm/aliases/default/bin/node" ]; then
+  export PATH="$HOME/.local/share/fnm/aliases/default/bin:$PATH"
+fi
+if [ -x "$HOME/Library/Application Support/fnm/aliases/default/bin/node" ]; then
+  export PATH="$HOME/Library/Application Support/fnm/aliases/default/bin:$PATH"
+fi
+if ! command -v node >/dev/null 2>&1 && [ -s "$HOME/.nvm/nvm.sh" ]; then
+  # shellcheck disable=SC1090
+  . "$HOME/.nvm/nvm.sh"
+fi
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+ROOT="$(cd "$HERE/../../.." && pwd)"
+cd "$ROOT"
+
+alert() {
+  osascript -e "display alert \"$1\" message \"$2\" as critical" || true
+}
+
+if [ ! -f "$ROOT/server/index.js" ] || [ ! -f "$ROOT/scripts/launch.js" ]; then
+  alert "Video Repair" "Keep Video Repair.app inside the project folder you downloaded. Do not copy the app out by itself."
+  exit 1
+fi
+
+if ! command -v node >/dev/null 2>&1; then
+  alert "Node.js required" "Install Node.js 18 or newer from https://nodejs.org and open Video Repair again."
+  exit 1
+fi
+
+exec node "$ROOT/scripts/launch.js" --detach

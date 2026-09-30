@@ -1,0 +1,10 @@
+* text=auto
+*.command text eol=lf
+*.sh text eol=lf
+*.js text eol=lf
+*.bat -text linguist-language=Batchfile
+*.png binary
+*.icns binary
+*.jpg binary
+*.mov binary
+*.mp4 binary

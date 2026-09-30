@@ -1,0 +1,32 @@
+{
+  "name": "video-repair",
+  "version": "1.2.0",
+  "description": "Local advanced repair for corrupted MP4 and MOV files. Runs on macOS and Windows.",
+  "license": "MIT",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "open": "node scripts/launch.js",
+    "stop": "node scripts/launch.js --stop",
+    "check": "node scripts/launch.js --check",
+    "dev": "node server/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Surflick/video-repair.git"
+  },
+  "os": [
+    "darwin",
+    "win32",
+    "linux"
+  ],
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^11.1.0"
+  }
+}

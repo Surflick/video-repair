@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Repair — Advanced Batch</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+              <rect width="32" height="32" rx="8" fill="url(#g)" />
+              <path
+                d="M10 16.5l3.5 3.5L22 11.5"
+                stroke="#fff"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <defs>
+                <linearGradient id="g" x1="0" y1="0" x2="32" y2="32">
+                  <stop stop-color="#5B8CFF" />
+                  <stop offset="1" stop-color="#7C5CFF" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div>
+            <h1>Video Repair</h1>
+            <p class="tagline">Batch advanced repair · native resolution</p>
+          </div>
+        </div>
+        <div class="mode-badge">
+          <span class="pulse"></span>
+          Advanced · Batch
+        </div>
+      </header>
+
+      <nav class="steps" id="steps" aria-label="Repair steps">
+        <div class="step active" data-step="1">
+          <span class="step-num">1</span>
+          <span class="step-label">Damaged videos</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" data-step="2">
+          <span class="step-num">2</span>
+          <span class="step-label">Sample</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" data-step="3">
+          <span class="step-num">3</span>
+          <span class="step-label">Repair · Preview · Save</span>
+        </div>
+      </nav>
+
+      <main class="main">
+        <!-- Empty state upload -->
+        <section id="panel-upload" class="panel panel-upload">
+          <div class="step-intro">
+            <h2>Step 1 — Add damaged videos (batch OK)</h2>
+            <p>
+              Drop one or many corrupted <strong>.mp4</strong> / <strong>.mov</strong> files.
+              Then add one healthy sample from the same camera for the whole batch.
+            </p>
+          </div>
+          <div id="dropzone" class="dropzone" tabindex="0" role="button">
+            <div class="dropzone-inner">
+              <h2>Drop damaged videos here</h2>
+              <p>multi-select supported · <strong>.mp4</strong> &amp; <strong>.mov</strong></p>
+              <button type="button" class="btn btn-primary" id="btn-browse">
+                Select Videos
+              </button>
+              <p class="hint">Local only · native resolution preserved on save</p>
+            </div>
+            <input
+              type="file"
+              id="file-input"
+              accept=".mp4,.mov,video/mp4,video/quicktime"
+              multiple
+              hidden
+            />
+          </div>
+        </section>
+
+        <!-- Workspace -->
+        <section id="panel-workspace" class="panel panel-workspace hidden">
+          <div class="workspace-grid batch-grid">
+            <!-- Queue -->
+            <aside class="card queue-card">
+              <div class="card-head">
+                <h3>Batch queue <span id="queue-count" class="count-pill">0</span></h3>
+                <button type="button" class="btn btn-ghost btn-sm" id="btn-add-more">+ Add</button>
+              </div>
+              <ul class="queue-list" id="queue-list"></ul>
+              <input
+                type="file"
+                id="file-input-more"
+                accept=".mp4,.mov,video/mp4,video/quicktime"
+                multiple
+                hidden
+              />
+            </aside>
+
+            <!-- Center detail -->
+            <div class="center-col">
+              <article class="card preview-card">
+                <div class="card-head">
+                  <h3 id="detail-title">Selected file</h3>
+                  <span id="file-status" class="status-pill">—</span>
+                </div>
+
+                <!-- Before repair: thumb; after: video player -->
+                <div id="preview-area" class="preview-area">
+                  <div id="thumb-mode" class="thumb-mode">
+                    <div class="thumb-wrap">
+                      <img id="thumb" alt="" class="thumb hidden" />
+                      <div id="thumb-placeholder" class="thumb-placeholder">
+                        <span>No preview</span>
+                      </div>
+                      <div id="progress-ring-wrap" class="progress-ring-wrap hidden">
+                        <svg class="progress-ring" width="120" height="120" viewBox="0 0 120 120">
+                          <circle class="ring-bg" cx="60" cy="60" r="52" />
+                          <circle
+                            id="ring-fg"
+                            class="ring-fg"
+                            cx="60"
+                            cy="60"
+                            r="52"
+                            stroke-dasharray="326.73"
+                            stroke-dashoffset="326.73"
+                          />
+                        </svg>
+                        <div class="ring-label">
+                          <span id="ring-pct">0</span><span class="pct-sign">%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="player-mode" class="player-mode hidden">
+                    <div class="player-label">
+                      <span class="preview-badge">Preview before save</span>
+                      <span id="native-res-badge" class="res-badge">—</span>
+                    </div>
+                    <video id="preview-video" class="preview-video" controls playsinline></video>
+                    <p class="preview-hint">
+                      Watch the repair result above. Download only when you’re happy with it.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="file-meta">
+                  <div class="file-name" id="file-name">—</div>
+                  <div class="meta-row">
+                    <span id="meta-size">—</span>
+                    <span class="dot">·</span>
+                    <span id="meta-res">—</span>
+                    <span class="dot">·</span>
+                    <span id="meta-dur">—</span>
+                  </div>
+                  <div class="meta-row codecs" id="meta-codecs">—</div>
+                </div>
+              </article>
+
+              <!-- Shared sample -->
+              <article class="card sample-card">
+                <div class="card-head">
+                  <h3>Sample video <span class="req-badge">Required · whole batch</span></h3>
+                  <span id="sample-status" class="status-pill needs">Needed</span>
+                </div>
+                <p class="sample-help">
+                  One healthy clip from the <strong>same camera</strong> applies to every file in the queue.
+                </p>
+                <div id="sample-empty" class="sample-empty">
+                  <div id="sample-dropzone" class="dropzone sample-dropzone" tabindex="0" role="button">
+                    <div class="dropzone-inner compact">
+                      <h4>Drop sample video</h4>
+                      <p>Healthy .mp4 / .mov from same device</p>
+                      <button type="button" class="btn btn-primary" id="btn-sample-browse">
+                        Select Sample
+                      </button>
+                    </div>
+                    <input
+                      type="file"
+                      id="sample-input"
+                      accept=".mp4,.mov,video/mp4,video/quicktime"
+                      hidden
+                    />
+                  </div>
+                </div>
+                <div id="sample-loaded" class="sample-loaded hidden">
+                  <div class="sample-row">
+                    <div class="thumb-wrap sample-thumb-wrap">
+                      <img id="sample-thumb" alt="" class="thumb hidden" />
+                      <div id="sample-thumb-placeholder" class="thumb-placeholder">
+                        <span>Sample</span>
+                      </div>
+                    </div>
+                    <div class="sample-meta">
+                      <div class="file-name" id="sample-name">—</div>
+                      <div class="meta-row">
+                        <span id="sample-size">—</span>
+                        <span class="dot">·</span>
+                        <span id="sample-res">—</span>
+                        <span class="dot">·</span>
+                        <span id="sample-dur">—</span>
+                      </div>
+                      <div class="meta-row codecs" id="sample-codecs">—</div>
+                      <div class="sample-actions">
+                        <button type="button" class="btn btn-ghost btn-sm" id="btn-sample-change">
+                          Change sample
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <!-- Right controls -->
+            <article class="card repair-card">
+              <div class="card-head">
+                <h3>Repair</h3>
+                <span class="adv-chip">Native res</span>
+              </div>
+
+              <div class="big-progress">
+                <div class="bar-track">
+                  <div id="bar-fill" class="bar-fill" style="width: 0%"></div>
+                  <div id="bar-glow" class="bar-glow" style="left: 0%"></div>
+                </div>
+                <div class="big-pct"><span id="big-pct">0</span>%</div>
+              </div>
+              <p class="stage-now" id="stage-now">Add files and a sample to begin…</p>
+
+              <div class="graph-wrap">
+                <canvas id="progress-graph" width="640" height="120"></canvas>
+              </div>
+
+              <ul class="stages" id="stages-list"></ul>
+
+              <div class="format-row">
+                <label>Save as</label>
+                <div class="segmented" id="format-group">
+                  <button type="button" class="seg active" data-format="auto">Original</button>
+                  <button type="button" class="seg" data-format="mp4">MP4</button>
+                  <button type="button" class="seg" data-format="mov">MOV</button>
+                </div>
+                <span class="format-hint" id="format-hint">Native format · native resolution</span>
+              </div>
+
+              <div class="actions actions-col">
+                <button type="button" class="btn btn-primary btn-lg" id="btn-repair-all" disabled>
+                  Repair all ready
+                </button>
+                <button type="button" class="btn btn-ghost" id="btn-repair-one" disabled>
+                  Repair selected
+                </button>
+                <button type="button" class="btn btn-danger hidden" id="btn-cancel">Cancel</button>
+                <a class="btn btn-success btn-lg hidden" id="btn-download" href="#" download>
+                  Download selected
+                </a>
+                <button type="button" class="btn btn-success hidden" id="btn-download-all">
+                  Download all repaired
+                </button>
+                <button type="button" class="btn btn-ghost" id="btn-new">Clear batch</button>
+              </div>
+
+              <div id="result-banner" class="result-banner hidden"></div>
+
+              <details class="log-panel">
+                <summary>Repair log</summary>
+                <pre id="log-pre" class="log-pre"></pre>
+              </details>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span id="health-status">Checking FFmpeg…</span>
+        <span class="sep">·</span>
+        <span>Local · Mac &amp; Windows · Preview before save</span>
+      </footer>
+    </div>
+
+    <div id="toast" class="toast hidden" role="status"></div>
+    <script src="/app.js"></script>
+  </body>
+</html>
