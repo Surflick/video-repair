@@ -91,8 +91,24 @@ function candidates(name) {
   return [`/usr/bin/${name}`, `/usr/local/bin/${name}`];
 }
 
+function bundled(name) {
+  const root = path.join(__dirname, "..", "vendor");
+  if (process.platform === "win32") return path.join(root, "win-x64", `${name}.exe`);
+  if (process.platform === "darwin") {
+    const arch = process.arch === "arm64" ? "darwin-arm64" : "darwin-x64";
+    return path.join(root, arch, name);
+  }
+  return null;
+}
+
 function resolveBinary(name) {
-  return envPath(name) || which(name) || firstExisting(candidates(name)) || name;
+  return (
+    envPath(name) ||
+    firstExisting([bundled(name)]) ||
+    which(name) ||
+    firstExisting(candidates(name)) ||
+    name
+  );
 }
 
 function works(bin) {

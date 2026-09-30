@@ -1,5 +1,8 @@
 node_modules/
 data/
+dist/
+vendor/
+temp/
 .DS_Store
 *.log
 .grok/
