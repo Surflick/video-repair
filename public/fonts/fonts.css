@@ -1,0 +1,5 @@
+/* Bundled locally so Video Repair works fully offline (SIL OFL fonts via Fontsource). */
+@font-face{font-family:'DM Sans';font-style:normal;font-display:swap;font-weight:100 1000;font-stretch:100%;src:url(/fonts/dm-sans-latin-opsz-normal.woff2) format('woff2-variations');}
+@font-face{font-family:'DM Sans';font-style:italic;font-display:swap;font-weight:100 1000;font-stretch:100%;src:url(/fonts/dm-sans-latin-opsz-italic.woff2) format('woff2-variations');}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-display:swap;font-weight:400;src:url(/fonts/jetbrains-mono-latin-400-normal.woff2) format('woff2');}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-display:swap;font-weight:500;src:url(/fonts/jetbrains-mono-latin-500-normal.woff2) format('woff2');}

@@ -1,4 +1,11 @@
 #!/bin/bash
+# Launching a script-only .app from Finder/Dock can start it under Rosetta
+# (uname -m = x86_64) on Apple Silicon. Re-run natively so the arm64 vendor
+# binaries are used instead of slow translated x64 ones.
+if [ "$(uname -m)" = "x86_64" ] && [ "$(/usr/sbin/sysctl -n hw.optional.arm64 2>/dev/null)" = "1" ] && [ -z "${VR_NATIVE:-}" ]; then
+  export VR_NATIVE=1
+  exec /usr/bin/arch -arm64 /bin/bash "$0" "$@"
+fi
 # Open Video Repair on macOS. Uses the Node and FFmpeg shipped in vendor/
 # when this folder came from the GitHub zip. Otherwise uses what is installed.
 set -euo pipefail
