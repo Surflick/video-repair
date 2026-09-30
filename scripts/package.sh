@@ -55,7 +55,7 @@ copy_app_files "$DEST_WIN"
 cp "$ROOT/Open Video Repair.bat" "$DEST_WIN/Open Video Repair.bat"
 rm -rf "$DEST_WIN/Video Repair.app"
 rm -f "$DEST_WIN/Open Video Repair.command" "$DEST_WIN/Fix macOS warning.command"
-rm -f "$DEST_WIN/scripts/launcher.c" "$DEST_WIN/scripts/build_app.sh" "$DEST_WIN/scripts/mac-open.sh"
+rm -rf "$DEST_WIN/scripts/native" "$DEST_WIN/scripts/build_app.sh" "$DEST_WIN/scripts/mac-open.sh"
 
 echo "Fetching Windows Node and FFmpeg…"
 "$ROOT/scripts/fetch_vendor.sh" "$DEST_WIN/vendor" win-x64

@@ -25,6 +25,8 @@ The download already includes Node and FFmpeg. You do not install anything else.
 
 If macOS still blocks it, double-click **Fix macOS warning** in that same folder, then open the app again.
 
+Video Repair opens in its own window, like any Mac app. It needs no browser and no internet connection. Repaired videos save to your Downloads folder. Quitting the app also stops the repair engine. Works on macOS 11.3 or newer.
+
 ## Windows
 
 1. Unzip **Video-Repair-windows.zip**. Keep the whole **Video Repair** folder together.
@@ -53,6 +55,12 @@ npm start
 ```
 
 Then open http://127.0.0.1:47821
+
+Rebuild the Mac app (needs Xcode or the Command Line Tools):
+
+```bash
+./scripts/build_app.sh
+```
 
 Rebuild the zips:
 
